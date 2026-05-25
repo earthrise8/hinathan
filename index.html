@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Color Domain Generator</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #312e81
+    );
+    padding:20px;
+    color:white;
+}
+
+.container{
+    width:min(800px,100%);
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:25px;
+    padding:35px;
+}
+
+h1{
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+p{
+    opacity:.8;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.1);
+    color:white;
+    font-size:1rem;
+    margin-bottom:15px;
+}
+
+input::placeholder{
+    color:rgba(255,255,255,.5);
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(
+        90deg,
+        #7c3aed,
+        #2563eb
+    );
+    color:white;
+    cursor:pointer;
+    font-size:1rem;
+    transition:.25s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.results{
+    margin-top:25px;
+    display:grid;
+    gap:12px;
+}
+
+.card{
+    padding:16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.07);
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateX(5px);
+}
+
+.domain{
+    font-size:1.1rem;
+    font-weight:bold;
+}
+
+.tag{
+    opacity:.65;
+    margin-top:4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎨 Color Domain Generator</h1>
+<p>
+Enter favorite colors separated by commas.
+Example: blue, black, silver
+</p>
+
+<input
+id="colors"
+placeholder="blue, black, silver"
+/>
+
+<button onclick="generateDomains()">
+Generate Domains
+</button>
+
+<div class="results" id="results"></div>
+
+</div>
+
+<script>
+
+const prefixes = [
+"nova",
+"echo",
+"pixel",
+"flux",
+"forge",
+"lunar",
+"void",
+"zen",
+"stellar",
+"drift",
+"pulse",
+"vertex",
+"orbit",
+"sky",
+"frost"
+];
+
+const suffixes = [
+"labs",
+"hub",
+"works",
+"studio",
+"net",
+"forge",
+"craft",
+"space",
+"labs",
+"flow",
+"verse",
+"byte",
+"build"
+];
+
+function cap(word){
+    return word.charAt(0).toUpperCase() +
+    word.slice(1);
+}
+
+function random(arr){
+    return arr[
+        Math.floor(
+            Math.random()*arr.length
+        )
+    ];
+}
+
+function generateDomains(){
+
+    const input =
+    document.getElementById(
+        "colors"
+    ).value;
+
+    const colors =
+    input.split(",")
+    .map(x=>x.trim().toLowerCase())
+    .filter(Boolean);
+
+    const results =
+    document.getElementById(
+        "results"
+    );
+
+    results.innerHTML="";
+
+    if(colors.length===0){
+        results.innerHTML=
+        "<div class='card'>Add at least one color</div>";
+        return;
+    }
+
+    for(let i=0;i<10;i++){
+
+        let color =
+        random(colors);
+
+        let mode =
+        Math.floor(
+            Math.random()*3
+        );
+
+        let domain="";
+
+        if(mode===0){
+            domain=
+            color +
+            random(prefixes);
+        }
+
+        else if(mode===1){
+            domain=
+            random(prefixes)+
+            color;
+        }
+
+        else{
+            domain=
+            color+
+            random(suffixes);
+        }
+
+        let endings = [
+            ".com",
+            ".dev",
+            ".io",
+            ".org",
+            ".net"
+        ];
+
+        let ext =
+        random(endings);
+
+        results.innerHTML += `
+        <div class="card">
+            <div class="domain">
+                ${cap(domain)}${ext}
+            </div>
+            <div class="tag">
+                Inspired by ${color}
+            </div>
+        </div>
+        `;
+    }
+
+}
+
+</script>
+
+</body>
+</html>
